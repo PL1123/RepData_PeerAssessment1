@@ -49,9 +49,10 @@ totstep <- act %>%
         summarize(sum = sum(steps, na.rm = TRUE))
 View(totstep) #for viewing the results
 ```
+
 2. Histogram of total number of steps taken each day
 ```{r}
-hist(act1$sum, xlab="steps", main = "Total number of steps taken each day")
+hist(totstep$sum, xlab="steps", main = "Total number of steps taken each day")
 ```
 
 3. Mean and median number of steps taken each day
@@ -118,14 +119,14 @@ Are there differences in actiity patterns between weekdays and weekneds?
 1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
 ```{r}
 newact$date <- as.Date(newact$date)
-newact$wkday <- weekdays(newact$date)
-newact$wkend <- ifelse(newact$weekday == "Sunday" | newact$weekday == "Saturday", "Weekend", "Weekday")
-newact$wkend <- as.factor(newact$wkend)
+newact$weekday <- weekdays(newact$date)
+newact$weekend <- ifelse(newact$weekday %in% "Sunday" | newact$weekday %in%"Saturday", "Weekend", "Weekday")
+newact$weekend <- as.factor(newact$weekend)
 ```
 2.Make a panel plot containing a time series plot  of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
 ```{r}
 #General thought process is to use aggregate and then ggplot. 
-Datasetfinal <- aggregate(newact$steps, by=list(newact$wkend,newact$interval ), mean)
+Datasetfinal <- aggregate(newact$steps, by=list(newact$weekend,newact$interval ), mean)
 names(Datasetfinal)
 # Renaming columns
 names(Datasetfinal) <- c("weekend", "interval", "steps")
